@@ -2,9 +2,10 @@ import typing
 
 from BaseClasses import Region, CollectionState, Location
 
-from .data.Locations import location_dict, location_groups
+from .data.Locations import location_dict, location_groups, get_pickpocket_region_and_location
 from .data.Items import item_groups
-from .data.Constants import EPISODES, TREASURES
+from .data.Constants import EPISODES, TREASURES, LOOT
+from ..hk.Options import count
 
 if typing.TYPE_CHECKING:
     from . import Sly2World
@@ -48,6 +49,11 @@ def create_access_rule(episode: str, n: int, options: "Sly2Options", player: int
 
         return access
 
+    return rule
+
+def create_pickpocket_access_rule(episode: str, n: int, options: "Sly2Options", player: int):
+    """Returns a function that checks if the player has access to a specific region"""
+    def rule(state: CollectionState): return True
     return rule
 
 def create_regions(world: "Sly2World"):
@@ -129,3 +135,34 @@ def create_regions(world: "Sly2World"):
             world.get_region(region).add_locations(
                 {location_name: location_dict[location_name].code}
             )
+
+    if world.options.include_pickpocketing:
+        # Because loot can be found in multiple episodes but AP locations can only be in 1 region, we make "hybrid-
+        # regions" for these loot locations that can be accessed if the player has access to any 1 of the "base regions"
+        hybrid_region_names = []
+        for i, (loot, eps) in enumerate(LOOT.items()):
+            region_name, location_name = get_pickpocket_region_and_location(i, loot, eps)
+
+            # If it is in only 1 episode or a hybrid region that's already made, then add that location to that region.
+            if len(eps) == 1 or region_name in hybrid_region_names:
+                world.get_region(region_name).add_locations(
+                    {location_name: location_dict[location_name].code}
+                )
+
+            # If it is in multiple episodes & that hybrid region has not been made yet, then create that hybrid region, add
+            # the location to it, and connect that hybrid region to each of the episodes that this loot can be found in.
+            else:
+                region = Region(region_name, world.player, world.multiworld)
+                region.add_locations({location_name: location_dict[location_name].code})
+
+                # Connect that hybrid region to each of the episodes' regions that this loot can be found in
+                world.multiworld.regions.append(region)
+                for ep in eps:
+                    other_region = world.get_region(f"Episode {ep} (1)")
+                    other_region.connect(
+                        world.get_region(region_name),
+                        None,
+                        create_pickpocket_access_rule(f"Episode {ep}", ep, world.options, world.player)
+                    )
+
+                hybrid_region_names.append(region_name)

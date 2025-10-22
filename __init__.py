@@ -191,6 +191,7 @@ class Sly2World(World):
                     self.options.thiefnet_minimum.value = slot_data["thiefnet_minimum"]
                     self.options.thiefnet_maximum.value = slot_data["thiefnet_maximum"]
                     self.options.include_vaults.value = slot_data["include_vaults"]
+                    self.options.include_pickpocketing.value = slot_data["include_pickpocketing"]
                     self.options.bottle_location_bundle_size.value = slot_data["bottle_location_bundle_size"]
                     self.options.bottlesanity.value = slot_data["bottlesanity"]
                     self.options.scout_thiefnet.value = slot_data["scout_thiefnet"]
@@ -250,6 +251,7 @@ class Sly2World(World):
             "thiefnet_minimum",
             "thiefnet_maximum",
             "include_vaults",
+            "include_pickpocketing",
             "bottle_location_bundle_size",
             "bottlesanity",
             "bottle_item_bundle_size",

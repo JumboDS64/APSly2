@@ -7,16 +7,17 @@ class Sly2LocationData(NamedTuple):
     code: int
     category: str
 
-def get_pickpocket_region_and_location(i: int, loot: str, eps: List[str]) -> List[str]:
-    # TODO: Confirm final name for these regions and locations
+def get_pickpocket_region_and_location(i: int, loot: str, eps: List[List[int]]) -> List[str]:
+    # TODO: Confirm final name for these regions and locations.
+    # Regions are probably good, it is just placing them on to the end of the location names that is a bit suspect atm.
     if len(eps) == 1:
-        region_name = f"Episode {eps[0]} (1)"
-        location_name = f"Pickpocket {loot} - {region_name[:-4]}"
+        region_name = f"Episode {eps[0][0]} ({eps[0][1]})"
+        location_name = f"Pickpocket {loot} - {region_name}"
     else:
         region_name = f"Episodes "
         for ep in eps:
-            region_name = region_name + f"{ep}, "
-        region_name = region_name[:-5] + " or " + region_name[-3:-2]
+            region_name = region_name + f"{ep[0]} ({ep[1]}), "
+        region_name = region_name[:-7] + "or " + region_name[-6:-2]
         location_name = f"Pickpocket {loot} - " + region_name
     return [region_name, location_name]
 

@@ -51,7 +51,8 @@ def create_access_rule(episode: str, n: int, options: "Sly2Options", player: int
 
     return rule
 
-def create_pickpocket_access_rule(episode: str, n: int, options: "Sly2Options", player: int):
+# Likely don't need these definition inputs, but IDK.
+def create_pickpocket_access_rule(region: str, options: "Sly2Options", player: int):
     """Returns a function that checks if the player has access to a specific region"""
     def rule(state: CollectionState): return True
     return rule
@@ -158,11 +159,11 @@ def create_regions(world: "Sly2World"):
                 # Connect that hybrid region to each of the episodes' regions that this loot can be found in
                 world.multiworld.regions.append(region)
                 for ep in eps:
-                    other_region = world.get_region(f"Episode {ep} (1)")
+                    other_region = world.get_region(f"Episode {ep[0]} ({ep[1]})")
                     other_region.connect(
                         world.get_region(region_name),
                         None,
-                        create_pickpocket_access_rule(f"Episode {ep}", ep, world.options, world.player)
+                        create_pickpocket_access_rule(region_name, world.options, world.player)
                     )
 
                 hybrid_region_names.append(region_name)

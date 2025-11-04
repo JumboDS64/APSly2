@@ -44,8 +44,8 @@ The randomizer has full support for [Universal Tracker](https://github.com/Faris
 ### The client won't connect to my PCSX2 instance
 Make sure you have PINE enabled and that you're playing the US version of the game.
 
-### I'm stuck in the tutorial
-Type `/menu` command in the client and you should be taken to the menu.
+### I'm stuck in the start menu/tutorial
+Type `/menu` command in the client and you should be taken to the episode select menu.
 
 ### There's no "save and quit" option in the pause menu
 You can save the game manually in Options.

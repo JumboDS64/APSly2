@@ -5,7 +5,6 @@ from BaseClasses import Region, CollectionState, Location
 from .data.Locations import location_dict, location_groups, get_pickpocket_region_and_location
 from .data.Items import item_groups
 from .data.Constants import EPISODES, TREASURES, LOOT
-from ..hk.Options import count
 
 if typing.TYPE_CHECKING:
     from . import Sly2World

@@ -135,7 +135,12 @@ def create_regions(world: "Sly2World"):
         hybrid_region_names = []
         for loot, eps in LOOT.items():
             location_name = f"Pickpocket {loot}"
-            region_name = "/".join([f"Episode {i} ({j})" for i,j in eps])
+            if hasattr(world.multiworld, "generation_is_fake"):
+                regions = [f"Episode {i} (1)" for i,j in eps]
+            else:
+                regions = [f"Episode {i} ({j})" for i,j in eps]
+
+            region_name = "/".join(regions)
 
             # If it is in only 1 episode or a hybrid region that's already made, then add that location to that region.
             if len(eps) == 1 or region_name in hybrid_region_names:
@@ -151,8 +156,8 @@ def create_regions(world: "Sly2World"):
 
                 # Connect that hybrid region to each of the episodes' regions that this loot can be found in
                 world.multiworld.regions.append(region)
-                for ep in eps:
-                    other_region = world.get_region(f"Episode {ep[0]} ({ep[1]})")
+                for r in regions:
+                    other_region = world.get_region(r)
                     other_region.connect(region)
 
                 hybrid_region_names.append(region_name)

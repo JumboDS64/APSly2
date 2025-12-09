@@ -120,14 +120,15 @@ def set_rules(world: "Sly2World"):
     # Putting ThiefNet stuff out of logic, to make early game less slow.
     # Divides the items into 8 groups of 3. First groups requires 2 episodes
     # items to be in logic, second group requires 4, etc.
-    for i in range(1,25):
-        episode_items_n = ceil(i/3)*2
-        add_rule(
-            world.get_location(f"ThiefNet {i:02}"),
-            lambda state, n=episode_items_n: (
-                state.has_group("Episode", player, n)
+    if not hasattr(world.multiworld, "generation_is_fake"): # (unless tracking)
+        for i in range(1,25):
+            episode_items_n = ceil(i/3)*2
+            add_rule(
+                world.get_location(f"ThiefNet {i:02}"),
+                lambda state, n=episode_items_n: (
+                    state.has_group("Episode", player, n)
+                )
             )
-        )
 
 
     if world.options.goal.value < 5:

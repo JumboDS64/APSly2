@@ -204,6 +204,11 @@ requires:
     'false': 0
     'true': 50
 
+  # Whether to include pickpocketing loot from guards as checks.
+  include_pickpocketing:
+    'false': 50
+    'true': 0
+
   # How many bottles you need to collect for each check. Set to 0 to disable
   # bottles as checks.
   #

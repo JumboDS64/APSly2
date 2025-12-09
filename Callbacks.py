@@ -5,7 +5,8 @@ from random import randint
 from NetUtils import ClientStatus
 
 from .data import Items, Locations
-from .data.Constants import EPISODES, POWERUP_TEXT, OTHER_POWERUPS, TREASURES, DEATH_TYPES
+from .data.Constants import EPISODES, POWERUP_TEXT, OTHER_POWERUPS, TREASURES, DEATH_TYPES, LOOT
+from .data.Locations import get_pickpocket_region_and_location
 from .Sly2Interface import Sly2Episode, PowerUps
 
 if TYPE_CHECKING:
@@ -465,10 +466,18 @@ async def handle_checks(ctx: 'Sly2Context') -> None:
     for i, (episode_name,episode_treasures) in enumerate(TREASURES.items()):
         for j, treasure in enumerate(episode_treasures):
             address = ctx.game_interface.addresses["treasures"][i][j]
-            if ctx.game_interface.treasure_stolen(address):
+            if ctx.game_interface.treasure_or_loot_stolen(address):
                 location_name = f"{episode_name} - {treasure[0]}"
                 location_code = Locations.location_dict[location_name].code
                 ctx.locations_checked.add(location_code)
+
+    # Loot
+    for i, (loot, eps) in enumerate(LOOT.items()):
+        address = ctx.game_interface.addresses["loot"][i]
+        if ctx.game_interface.treasure_or_loot_stolen(address):
+            location_name = get_pickpocket_region_and_location(i, loot, eps)[1]
+            location_code = Locations.location_dict[location_name].code
+            ctx.locations_checked.add(location_code)
 
     # Vaults
     for i, opened in enumerate(ctx.vaults):

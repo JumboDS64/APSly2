@@ -110,7 +110,7 @@ class RequiredKeysGoal(Range):
 
 class IncludeTOM(Toggle):
     """
-    Add the TOM ability to the pool.
+    Add the TOM ability/gadget to the pool.
     """
 
     display_name = "Include TOM"
@@ -118,10 +118,18 @@ class IncludeTOM(Toggle):
 
 class IncludeMegaJump(Toggle):
     """
-    Add the Mega Jump ability to the pool.
+    Add the Mega Jump ability/gadget to the pool.
     """
 
     display_name = "Include Mega Jump"
+
+
+class IncludeTimeRush(Toggle):
+    """
+    Add the Time Rush ability/gadget to the pool.
+    """
+
+    display_name = "Include Time Rush"
 
 
 class CoinsMinimum(Range):
@@ -176,6 +184,13 @@ class IncludeVaults(DefaultOnToggle):
     display_name = "Include Vaults"
 
 
+class IncludePickpocketing(Toggle):
+    """
+    Whether to include pickpocketing loot from guards as checks.
+    """
+    display_name = "Include Pickpocketing"
+
+
 class BottleLocationBundleSize(Range):
     """
     How many bottles you need to collect for each check. Set to 0 to disable
@@ -208,6 +223,21 @@ class BottleSanity(DefaultOnToggle):
 
     display_name = "Bottlesanity"
 
+# This is an option planned for the future, to be able to turn off LootSanity and
+# to have loot be counted using one of a few other options: either as an overall
+# total, or as total unique loot. However, for the initial implementation,
+# LootSanity will just be on by default, along with the option of turning loot as
+# locations off, similar to vaults.
+#
+# To see OTHER possible options related to loot being considered, check out what
+# has been writen in pull request #3 for this game's AP on GitHub.
+#class LootSanity(Choice):
+#    """
+#    Each piece of loot is its own check, rather than counting the number of
+#    total loot collected.
+#    """
+#    display_name = "Lootsanity"
+
 class ScoutThiefnet(DefaultOnToggle):
     """
     Whether to scout/hint ThiefNet checks. They will still be displayed in game.
@@ -235,14 +265,17 @@ class Sly2Options(PerGameCommonOptions):
     required_keys_goal: RequiredKeysGoal
     include_tom: IncludeTOM
     include_mega_jump: IncludeMegaJump
+    include_time_rush: IncludeTimeRush
     coins_minimum: CoinsMinimum
     coins_maximum: CoinsMaximum
     include_vaults: IncludeVaults
+    include_pickpocketing: IncludePickpocketing
     thiefnet_minimum: ThiefNetCostMinimum
     thiefnet_maximum: ThiefNetCostMaximum
     bottle_location_bundle_size: BottleLocationBundleSize
     bottle_item_bundle_size: BottleItemBundleSize
     bottlesanity: BottleSanity
+    # lootsanity:LootSanity
     scout_thiefnet: ScoutThiefnet
     # skip_intro: SkipIntro
 
@@ -259,6 +292,7 @@ sly2_option_groups = [
     OptionGroup("Items",[
         IncludeTOM,
         IncludeMegaJump,
+        IncludeTimeRush,
         CoinsMinimum,
         CoinsMaximum,
         BottleItemBundleSize
@@ -267,6 +301,7 @@ sly2_option_groups = [
         ThiefNetCostMinimum,
         ThiefNetCostMaximum,
         IncludeVaults,
+        IncludePickpocketing,
         BottleLocationBundleSize,
         BottleSanity,
         ScoutThiefnet

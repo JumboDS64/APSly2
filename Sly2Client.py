@@ -3,7 +3,7 @@ import asyncio
 import multiprocessing
 import traceback
 
-from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, logger, server_loop, gui_enabled
+from CommonClient import get_base_parser, logger, server_loop, gui_enabled
 import Utils
 
 from .data import Locations, Items
@@ -11,7 +11,20 @@ from .data.Constants import EPISODES
 from .Sly2Interface import Sly2Interface, Sly2Episode, PowerUps
 from .Callbacks import init, update
 
-class Sly2CommandProcessor(ClientCommandProcessor):
+# Load Universal Tracker
+tracker_loaded: bool = False
+try:
+    from worlds.tracker.TrackerClient import (
+        TrackerCommandProcessor as ClientCommandProcessor,
+        TrackerGameContext as CommonContext,
+        UT_VERSION
+    )
+
+    tracker_loaded = True
+except ImportError:
+    from CommonClient import ClientCommandProcessor, CommonContext
+
+class Sly2CommandProcessor(ClientCommandProcessor): # type: ignore[misc]
     def _cmd_deathlink(self):
         """Toggle deathlink from client. Overrides default setting."""
         if isinstance(self.ctx, Sly2Context):
@@ -81,7 +94,7 @@ class Sly2CommandProcessor(ClientCommandProcessor):
     #     if isinstance(self.ctx, Sly2Context):
     #         self.ctx.game_interface.add_coins(int(amount))
 
-class Sly2Context(CommonContext):
+class Sly2Context(CommonContext): # type: ignore[misc]
     # Client variables
     command_processor = Sly2CommandProcessor
     game_interface: Sly2Interface
@@ -145,6 +158,7 @@ class Sly2Context(CommonContext):
         await self.send_connect()
 
     def on_package(self, cmd: str, args: dict):
+        super().on_package(cmd, args)
         if cmd == "Connected":
             self.slot_data = args["slot_data"]
 
@@ -264,6 +278,12 @@ def launch_client():
 
         logger.info("Connecting to server...")
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
+
+        # Runs Universal Tracker's internal generator
+        if tracker_loaded:
+            ctx.run_generator()
+            ctx.tags.remove("Tracker")
+
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()

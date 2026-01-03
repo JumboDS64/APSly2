@@ -34,7 +34,7 @@ class Goal(Choice):
     Which boss you must defeat to goal, or Clockwerk Hunt.
 
     Clockwerk Hunt requires you to collect a certain number of Clockwerk
-    parts/keys to goal.
+    parts/keys to goal. All Vaults requires you to open all 8 vaults.
     """
 
     display_name = "Goal"
@@ -45,6 +45,7 @@ class Goal(Choice):
     option_ClockLa = 4
     option_All_Bosses = 5
     option_Clockwerk_Hunt = 6
+    option_All_Vaults = 7
     default = 4
 
 

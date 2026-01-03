@@ -513,11 +513,20 @@ async def handle_check_goal(ctx: 'Sly2Context') -> None:
     if ctx.slot_data is None:
         return
 
-    if ctx.slot_data["goal"] < 6:
-        if ctx.game_interface.is_goaled(ctx.slot_data["goal"]):
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-    elif ctx.slot_data["goal"] == 6:
+    goal = ctx.slot_data["goal"]
+    goaled = False
+
+    if goal < 6:
+        goaled = ctx.game_interface.is_goaled(goal)
+    elif goal == 6:
         clockwerk_parts = [i for i in ctx.items_received if Items.from_id(i.item).category == "Clockwerk Part"]
 
-        if len(clockwerk_parts) >= ctx.slot_data["required_keys_goal"]:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+        goaled = len(clockwerk_parts) >= ctx.slot_data["required_keys_goal"]
+    elif goal == 7:
+        goaled = ctx.game_interface.all_vaults_opened()
+
+
+    if goaled:
+        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+
+

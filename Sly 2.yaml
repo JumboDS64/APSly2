@@ -57,7 +57,7 @@ requires:
   # Which boss you must defeat to goal, or Clockwerk Hunt.
   #
   # Clockwerk Hunt requires you to collect a certain number of Clockwerk
-  # parts/keys to goal.
+  # parts/keys to goal. All Vaults requires you to open all 8 vaults.
   goal:
     dimitri: 0
     rajan: 0
@@ -66,6 +66,7 @@ requires:
     clockla: 50
     all_bosses: 0
     clockwerk_hunt: 0
+    all_vaults: 0
 
   ## Clockwerk parts
 

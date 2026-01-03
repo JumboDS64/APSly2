@@ -189,6 +189,9 @@ class Sly2Interface(GameInterface):
     def vault_opened(self, vault: int) -> bool:
         return self._read32(self.addresses["vaults"][vault-1]) == 1
 
+    def all_vaults_opened(self) -> bool:
+        return all(self._read32(address) == 1 for address in self.addresses["vaults"])
+
     def fix_jobs(self) -> None:
         current_job = self.get_current_job()
         if current_job != 0xffffffff:

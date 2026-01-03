@@ -151,6 +151,16 @@ class Sly2Context(CommonContext): # type: ignore[misc]
             else:
                 self.notification(f"DeathLink: Received from {data['source']}")
 
+    def make_gui(self):
+        ui = super().make_gui()
+        ui.base_title = f"Sly 2 Client v{'.'.join([str(i) for i in self.version])}"
+        if tracker_loaded:
+            ui.base_title += f" | Universal Tracker {UT_VERSION}"
+
+        # AP version is added behind this automatically
+        ui.base_title += " | Archipelago"
+        return ui
+
     async def server_auth(self, password_requested: bool = False) -> None:
         if password_requested and not self.password:
             await super(Sly2Context, self).server_auth(password_requested)

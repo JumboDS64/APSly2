@@ -329,7 +329,7 @@ class Sly2Interface(GameInterface):
                 self._write32(addresses[i][j], chance)
 
     def set_loot_table(self, episode: Sly2Episode, loot_table: dict[str, list[tuple[int,bool,int]]]):
-        addresses = self.addresses["loot table odds"][episode.value-1]
+        addresses = self.addresses["loot table"][episode.value-1]
 
         for loot, locations in loot_table.items():
             for ep, large, slot in locations:

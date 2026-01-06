@@ -237,6 +237,17 @@ LOOT = {
 
 LOOT_IDS = {loot: 0x45A+i for i, loot in enumerate(LOOT.keys())}
 
+ENEMIES = [
+  ("Rats/Frogs", "Boars"),
+  ("Monkeys/Goats", "Rhinos"),
+  ("Monkeys/Goats", "Rhinos"),
+  ("Wolves/Bats", "Vultures"),
+  ("Wolves/Bats", "Vultures"),
+  ("Geese/Goats/Carmelita", "Moose"),
+  ("Geese/Goats", "Moose"),
+  ("Swarmer Pelicans", "Pelicans")
+]
+
 HUB_MAPS = [
     2,
     8,

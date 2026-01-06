@@ -1,5 +1,4 @@
-from typing import Dict, Optional, Mapping, Any, List, ClassVar
-import typing
+from typing import Dict, Optional, Mapping, Any, List, ClassVar, TextIO
 import logging
 
 from BaseClasses import Item, ItemClassification
@@ -18,7 +17,7 @@ from .Sly2Options import Sly2Options, StartingEpisode, sly2_option_groups
 from .Regions import create_regions
 from .data.Items import item_dict, item_groups, Sly2Item
 from .data.Locations import location_dict, location_groups
-from .data.Constants import EPISODES, LOOT
+from .data.Constants import EPISODES, LOOT, ENEMIES
 from .ItemPool import gen_pool
 from .Rules import set_rules
 
@@ -297,3 +296,29 @@ class Sly2World(World):
         slot_data["world_version"] = self.world_version
 
         return slot_data
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        spoiler_text = "\n====== Sly 2 ThiefNet Costs ======"
+        thiefnet_cost_text = "\n".join(
+            f"- ThiefNet {i+1:02}: {cost} coins"
+            for i, cost in enumerate(self.thiefnet_costs)
+        )
+        spoiler_text += "\n"+thiefnet_cost_text
+        spoiler_text += "\n======== Sly 2 Loot Table ========"
+        for i in range(8):
+            spoiler_text += f"\n== Episode {i+1} =="
+            for j in range(2):
+                enemy = ENEMIES[i][j]
+                loot = []
+                for k in range(1,7):
+                    for loot_name, loot_locations in self.loot_table.items():
+                        if (i+1,bool(j),k) in loot_locations:
+                            loot.append(loot_name)
+                            break
+                loot_odds = (17,17,17,17,16,16) if self.options.rebalance_pickpocketing else (30,30,15,15,5,5)
+                loot_text = ", ".join(f"{l} ({loot_odds[i]}%)" for i, l in enumerate(loot))
+                spoiler_text += f"\n- {enemy}: {loot_text}"
+
+        spoiler_text += "\n=================================="
+
+        spoiler_handle.write(spoiler_text)

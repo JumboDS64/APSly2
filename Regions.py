@@ -144,7 +144,7 @@ def create_regions(world: "Sly2World"):
             region_name = "/".join(regions)
 
             # If it is in only 1 episode or a hybrid region that's already made, then add that location to that region.
-            if len(eps) == 1 or region_name in hybrid_region_names:
+            if len(regions) == 1 or region_name in hybrid_region_names:
                 world.get_region(region_name).add_locations(
                     {location_name: location_dict[location_name].code}
                 )

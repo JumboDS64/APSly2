@@ -203,17 +203,35 @@ class IncludePickpocketing(Toggle):
     """
     display_name = "Include Pickpocketing"
 
-class RebalancePickpocketing(Toggle):
+class SmallGuardLootChance(Range):
     """
-    Change the loot table chances. If enabled, will take effect even if
-    pickpocketing is not included as checks.
+    The chance that any given small guard will have pick-pocketable loot.
+    """
+    display_name = "Small Guard Loot Chance"
+    range_start = 1
+    range_end = 100
+    default = 20
 
-    Increases the chances that enemies will have loot (20% -> 50% for small
-    guards and 40% -> 100% for big guards).
-    Also flattens the loot table drop rates from (30%/30%/15%/15%/5%/5%) to
-    (17%/17%/17%/17%/16%/16%).
+class LargeGuardLootChance(Range):
     """
-    display_name = "Rebalance Pickpocketing"
+    The chance that any given large guard will have pick-pocketable loot.
+    """
+    display_name = "Large Guard Loot Chance"
+    range_start = 1
+    range_end = 100
+    default = 40
+
+class LootTableDistribution(Range):
+    """
+    How "evenly" the loot table chances will be distributed. By default, the 6
+    pieces of loot a guard can carry will be distributed with the chances
+    (30%/30%/15%/15%/5%/5%). A lower value will make first pieces of loot even
+    more likely, and a higher value will flatten out the chances.
+    """
+    display_name = "Loot Table Distribution"
+    range_start = 1
+    range_end = 100
+    default = 50
 
 class RandomizeLoot(Toggle):
     """
@@ -303,7 +321,9 @@ class Sly2Options(PerGameCommonOptions):
     coins_maximum: CoinsMaximum
     include_vaults: IncludeVaults
     include_pickpocketing: IncludePickpocketing
-    rebalance_pickpocketing: RebalancePickpocketing
+    small_guard_loot_chance: SmallGuardLootChance
+    large_guard_loot_chance: LargeGuardLootChance
+    loot_table_distribution: LootTableDistribution
     randomize_loot: RandomizeLoot
     thiefnet_minimum: ThiefNetCostMinimum
     thiefnet_maximum: ThiefNetCostMaximum
@@ -337,10 +357,14 @@ sly2_option_groups = [
         ThiefNetCostMaximum,
         IncludeVaults,
         IncludePickpocketing,
-        RebalancePickpocketing,
-        RandomizeLoot,
         BottleLocationBundleSize,
         BottleSanity,
         ScoutThiefnet
+    ]),
+    OptionGroup("Pick-pocketing",[
+        RandomizeLoot,
+        SmallGuardLootChance,
+        LargeGuardLootChance,
+        LootTableDistribution
     ])
 ]

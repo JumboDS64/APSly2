@@ -223,24 +223,6 @@ requires:
     'false': 50
     'true': 0
 
-  # Change the loot table chances. If enabled, will take effect even if
-  # pickpocketing is not included as checks.
-
-  # Increases the chances that enemies will have loot (20% -> 50% for small
-  # guards and 40% -> 100% for big guards).
-  # Also flattens the loot table drop rates from (30%/30%/15%/15%/5%/5%) to
-  # (17%/17%/17%/17%/16%/16%).
-  rebalance_pickpocketing:
-    'false': 50
-    'true': 0
-
-  # Whether to shuffle all pickpocketing loot locations. A guard could have the
-  # same piece of loot multiple times on their table, so there is no
-  # guaranteeing that each guard will have exactly 6 different pieces of loot.
-  randomize_loot:
-    'false': 50
-    'true': 0
-
   # How many bottles you need to collect for each check. Set to 0 to disable
   # bottles as checks.
   #
@@ -263,6 +245,51 @@ requires:
   scout_thiefnet:
     'false': 0
     'true': 50
+
+  ## Pick-pocketing
+
+  # Whether to shuffle all pickpocketing loot locations. A guard could have the
+  # same piece of loot multiple times on their table, so there is no
+  # guaranteeing that each guard will have exactly 6 different pieces of loot.
+  randomize_loot:
+    'false': 50
+    'true': 0
+
+  # The chance that any given small guard will have pick-pocketable loot.
+  #
+  # You can define additional values between the minimum and maximum values.
+  # Minimum value is 1
+  # Maximum value is 100
+  small_guard_loot_chance:
+    20: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  # The chance that any given large guard will have pick-pocketable loot.
+  #
+  # You can define additional values between the minimum and maximum values.
+  # Minimum value is 1
+  # Maximum value is 100
+  large_guard_loot_chance:
+    40: 50
+    random: 0
+    random-low: 0
+    random-high: 0
+
+  # How "evenly" the loot table chances will be distributed. By default, the 6
+  # pieces of loot a guard can carry will be distributed with the chances
+  # (30%/30%/15%/15%/5%/5%). A lower value will make first pieces of loot even
+  # more likely, and a higher value will flatten out the chances.
+  #
+  # You can define additional values between the minimum and maximum values.
+  # Minimum value is 1
+  # Maximum value is 100
+  loot_table_distribution:
+    50: 50
+    random: 0
+    random-low: 0
+    random-high: 0
 
   ## Item & Location Options
 

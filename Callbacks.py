@@ -5,7 +5,7 @@ from random import randint
 from NetUtils import ClientStatus
 
 from .data import Items, Locations
-from .data.Constants import EPISODES, POWERUP_TEXT, OTHER_POWERUPS, TREASURES, DEATH_TYPES, LOOT
+from .data.Constants import EPISODES, POWERUP_TEXT, OTHER_POWERUPS, TREASURES, DEATH_TYPES, LOOT, PICKPOCKET_LOOT_TABLE_CHANCES
 from .Sly2Interface import Sly2Episode, PowerUps
 
 if TYPE_CHECKING:
@@ -51,8 +51,7 @@ async def update(ctx: 'Sly2Context', ap_connected: bool) -> None:
         if in_hub and not ctx.in_hub:
             ctx.in_hub = True
 
-        if ctx.slot_data["rebalance_pickpocketing"]:
-            set_pickpocketing(ctx)
+        set_pickpocketing(ctx)
 
         if ctx.slot_data["randomize_loot"]:
             set_loot_table(ctx)
@@ -100,10 +99,13 @@ async def update(ctx: 'Sly2Context', ap_connected: bool) -> None:
 
 def set_pickpocketing(ctx: 'Sly2Context'):
     """Set pickpocking chances to be higher"""
-    if ctx.current_episode is None:
+    if ctx.current_episode is None or ctx.slot_data is None:
         return
-    ctx.game_interface.set_loot_chance(ctx.current_episode, (0.5, 1.0))
-    loot_table = (17,17,17,17,16,16)
+
+    small_guard = ctx.slot_data["small_guard_loot_chance"]/100.0
+    large_guard = ctx.slot_data["large_guard_loot_chance"]/100.0
+    ctx.game_interface.set_loot_chance(ctx.current_episode, (small_guard, large_guard))
+    loot_table = PICKPOCKET_LOOT_TABLE_CHANCES[ctx.slot_data["loot_table_distribution"]-1]
     ctx.game_interface.set_loot_table_odds(ctx.current_episode, (loot_table, loot_table))
 
 def set_loot_table(ctx: 'Sly2Context'):

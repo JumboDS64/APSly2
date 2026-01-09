@@ -19,7 +19,7 @@ from .Sly2Options import Sly2Options, StartingEpisode, sly2_option_groups
 from .Regions import create_regions
 from .data.Items import item_dict, item_groups, Sly2Item
 from .data.Locations import location_dict, location_groups
-from .data.Constants import EPISODES, LOOT, ENEMIES
+from .data.Constants import EPISODES, LOOT, ENEMIES, PICKPOCKET_LOOT_TABLE_CHANCES
 from .ItemPool import gen_pool
 from .Rules import set_rules
 
@@ -284,7 +284,7 @@ class Sly2World(World):
                     self.thiefnet_costs = slot_data["thiefnet_costs"]
                     self.loot_table = slot_data["loot_table"]
                     self.options.starting_episode.value = slot_data["starting_episode"]
-                    self.options.permissive_yaml = slot_data["permissive_yaml"]
+                    self.options.permissive_yaml.value = slot_data["permissive_yaml"]
                     self.options.goal.value = slot_data["goal"]
                     self.options.keys_in_pool.value = slot_data["keys_in_pool"]
                     self.options.episode_8_keys.value = slot_data["episode_8_keys"]
@@ -299,7 +299,9 @@ class Sly2World(World):
                     self.options.thiefnet_maximum.value = slot_data["thiefnet_maximum"]
                     self.options.include_vaults.value = slot_data["include_vaults"]
                     self.options.include_pickpocketing.value = slot_data["include_pickpocketing"]
-                    self.options.rebalance_pickpocketing.value = slot_data["rebalance_pickpocketing"]
+                    self.options.small_guard_loot_chance.value = slot_data["small_guard_loot_chance"]
+                    self.options.large_guard_loot_chance.value = slot_data["large_guard_loot_chance"]
+                    self.options.loot_table_distribution.value = slot_data["loot_table_distribution"]
                     self.options.randomize_loot.value = slot_data["randomize_loot"]
                     self.options.bottle_item_bundle_size.value = slot_data["bottle_item_bundle_size"]
                     self.options.bottle_location_bundle_size.value = slot_data["bottle_location_bundle_size"]
@@ -368,7 +370,9 @@ class Sly2World(World):
             "thiefnet_maximum",
             "include_vaults",
             "include_pickpocketing",
-            "rebalance_pickpocketing",
+            "small_guard_loot_chance",
+            "large_guard_loot_chance",
+            "loot_table_distribution",
             "randomize_loot",
             "bottle_location_bundle_size",
             "bottlesanity",
@@ -404,7 +408,7 @@ class Sly2World(World):
                         if (i+1,bool(j),k) in loot_locations:
                             loot.append(loot_name)
                             break
-                loot_odds = (17,17,17,17,16,16) if self.options.rebalance_pickpocketing else (30,30,15,15,5,5)
+                loot_odds = PICKPOCKET_LOOT_TABLE_CHANCES[self.options.loot_table_distribution-1]
                 loot_text = ", ".join(f"{l} ({loot_odds[i]}%)" for i, l in enumerate(loot))
                 spoiler_text += f"\n- {enemy}: {loot_text}"
 

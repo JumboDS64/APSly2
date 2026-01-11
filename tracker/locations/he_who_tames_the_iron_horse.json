@@ -132,8 +132,6 @@
   {
     "name": "He Who Tames the Iron Horse Bottles",
     "access_rules": ["@He Who Tames the Iron Horse"],
-    "chest_opened_img": "images/icons/cluebottle.png",
-    "chest_unopened_img": "images/icons/cluebottle_uncollected.png",
     "visibility_rules": ["bottlesanityon"],
     "children": [
       {

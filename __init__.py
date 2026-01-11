@@ -105,6 +105,19 @@ class Sly2World(World):
         if generation_caller.function == "call_generate":
             opt.permissive_yaml.value = True
 
+        if opt.goal.value == 7 and not opt.include_vaults.value:
+            if opt.permissive_yaml:
+                logging.warning(
+                    f"{self.player_name}: " +
+                    "The \"All Vaults\" goal requires that include_vaults be turned on. "+
+                    "Turning on include_vaults"
+                )
+                opt.include_vaults.value = True
+            else:
+                raise OptionError(
+                    "The \"All Vaults\" goal requires that include_vaults be turned on. "
+                )
+
         if opt.episode_8_keys.value != 3 and opt.required_keys_episode_8 > opt.keys_in_pool:
             if opt.permissive_yaml:
                 logging.warning(

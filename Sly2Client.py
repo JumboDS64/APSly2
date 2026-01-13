@@ -305,7 +305,8 @@ async def _handle_game_ready(ctx: Sly2Context) -> None:
 
 async def _handle_game_not_ready(ctx: Sly2Context):
     """If the game is not connected, this will attempt to retry connecting to the game."""
-    ctx.game_interface.connect_to_game()
+    if not ctx.exit_event.is_set():
+        ctx.game_interface.connect_to_game()
     await asyncio.sleep(3)
 
 def launch_client():

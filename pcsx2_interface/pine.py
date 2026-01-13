@@ -34,33 +34,33 @@ class Pine:
         """ IPC result codes. A list of possible result codes the IPC can send back. Each one of them is what we call an
         "opcode" or "tag" and is the first byte sent by the IPC to differentiate between results.
         """
-        IPC_OK = 0,  # IPC command successfully completed.
+        IPC_OK = 0  # IPC command successfully completed.
         IPC_FAIL = 0xFF  # IPC command failed to complete.
 
     class IPCCommand(IntEnum):
-        READ8 = 0,
-        READ16 = 1,
-        READ32 = 2,
-        READ64 = 3,
-        WRITE8 = 4,
-        WRITE16 = 5,
-        WRITE32 = 6,
-        WRITE64 = 7,
-        VERSION = 8,
-        SAVE_STATE = 9,
-        LOAD_STATE = 0xA,
-        TITLE = 0xB,
-        ID = 0xC,
-        UUID = 0xD,
-        GAME_VERSION = 0xE,
-        STATUS = 0xF,
-        UNIMPLEMENTED = 0xFF,
+        READ8 = 0
+        READ16 = 1
+        READ32 = 2
+        READ64 = 3
+        WRITE8 = 4
+        WRITE16 = 5
+        WRITE32 = 6
+        WRITE64 = 7
+        VERSION = 8
+        SAVE_STATE = 9
+        LOAD_STATE = 0xA
+        TITLE = 0xB
+        ID = 0xC
+        UUID = 0xD
+        GAME_VERSION = 0xE
+        STATUS = 0xF
+        UNIMPLEMENTED = 0xFF
 
     class DataSize(IntEnum):
-        INT8 = 1,
-        INT16 = 2,
-        INT32 = 4,
-        INT64 = 8,
+        INT8 = 1
+        INT16 = 2
+        INT32 = 4
+        INT64 = 8
 
     def __init__(self, slot: int = 28011):
         if not 0 < slot <= 65536:
@@ -191,7 +191,10 @@ class Pine:
 
     def get_game_id(self) -> str:
         request = Pine.to_bytes(5, 4) + Pine.to_bytes(Pine.IPCCommand.ID, 1)
-        response = self._send_request(request)
+        try:
+            response = self._send_request(request)
+        except ConnectionError:
+            return ""
         return response[9:-1].decode("ascii")
 
     def _send_request(self, request: bytes) -> bytes:

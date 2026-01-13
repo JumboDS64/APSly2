@@ -121,6 +121,10 @@ class GameInterface():
             game_id = self.pcsx2_interface.get_game_id()
             # The first read of the address will be null if the client is faster than the emulator
             self.current_game = None
+            if game_id == "":
+                self.logger.debug("No game connected")
+                return
+
             if game_id in ADDRESSES.keys():
                 self.current_game = game_id
                 self.addresses = ADDRESSES[game_id]

@@ -202,7 +202,7 @@ class Sly2Context(CommonContext): # type: ignore[misc]
         if cmd == "Connected":
             self.slot_data = args["slot_data"]
 
-            if self.version != args["slot_data"]["world_version"]:
+            if self.version[:2] != args["slot_data"]["world_version"][:2]:
                 raise Exception(f"World generation version and client version don't match up. The world was generated with version {args["slot_data"]["world_version"]}, but the client is version {self.version}")
 
             self.thiefnet_purchases = PowerUps(*[

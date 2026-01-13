@@ -3,7 +3,8 @@ from typing import Optional, NamedTuple, Tuple, Dict, List
 from math import ceil
 import struct
 from logging import Logger
-from time import sleep, time
+from time import time
+import traceback
 
 from .pcsx2_interface.pine import Pine
 from .data.Constants import MENU_RETURN_DATA, CAIRO_RETURN_DATA, ADDRESSES, POWERUP_TEXT, HUB_MAPS, LOOT_IDS
@@ -128,9 +129,9 @@ class GameInterface():
                     f"Connected to the wrong game ({game_id})")
                 self.game_id_error = game_id
         except RuntimeError:
-            pass
+            self.logger.debug(traceback.format_exc())
         except ConnectionError:
-            pass
+            self.logger.debug(traceback.format_exc())
 
     def disconnect_from_game(self):
         self.pcsx2_interface.disconnect()

@@ -163,6 +163,11 @@ class Sly2Context(CommonContext): # type: ignore[misc]
         self.version = [0,8,4]
         self.game_interface = Sly2Interface(logger)
 
+    def run_generator(self):
+        if tracker_loaded:
+            super().run_generator()
+            Utils.init_logging("Sly 2 Client")
+
     def notification(self, text: str):
         self.notification_queue.append(text)
 

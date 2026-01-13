@@ -160,7 +160,7 @@ class Sly2Context(CommonContext): # type: ignore[misc]
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.version = [0,8,4]
+        self.version = [0,8,5]
         self.game_interface = Sly2Interface(logger)
 
     def run_generator(self):

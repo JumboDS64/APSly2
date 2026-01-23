@@ -10,7 +10,9 @@ requires:
     'Sly 2: Band of Thieves': 0.8.5 # Version of the world required for this yaml to work as expected.
 
 'Sly 2: Band of Thieves':
-  ## Game Options
+  ##################
+  ## Game Options ##
+  ##################
 
   # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
   #
@@ -64,7 +66,9 @@ requires:
     menace_from_the_north_eh: 0
     anatomy_for_disaster: 0
 
-  ## Goal
+  ##########
+  ## Goal ##
+  ##########
 
   # Which boss you must defeat to goal, or Clockwerk Hunt.
   #
@@ -80,7 +84,9 @@ requires:
     clockwerk_hunt: 0
     all_vaults: 0
 
-  ## Clockwerk parts
+  #####################
+  ## Clockwerk parts ##
+  #####################
 
   # How many Clockwerk parts are added to the pool. This number cannot be
   # lower than the required number of keys, for either Clockwerk Hunt or
@@ -136,7 +142,9 @@ requires:
     random-low: 0
     random-high: 0
 
-  ## Items
+  ###########
+  ## Items ##
+  ###########
 
   # Add the TOM ability/gadget to the pool.
   include_tom:
@@ -189,7 +197,9 @@ requires:
     random-low: 0
     random-high: 0
 
-  ## Locations
+  ###############
+  ## Locations ##
+  ###############
 
   # The minimum number of coins items on ThiefNet will cost.
   #
@@ -246,7 +256,9 @@ requires:
     'false': 0
     'true': 50
 
-  ## Pick-pocketing
+  ####################
+  ## Pick-pocketing ##
+  ####################
 
   # Whether to shuffle all pickpocketing loot locations. A guard could have the
   # same piece of loot multiple times on their table, so there is no
@@ -291,7 +303,9 @@ requires:
     random-low: 0
     random-high: 0
 
-  ## Item & Location Options
+  #############################
+  ## Item & Location Options ##
+  #############################
 
   # Forces these items to be in their native world.
   local_items: []

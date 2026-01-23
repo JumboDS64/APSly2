@@ -92,6 +92,15 @@ class GameInterface():
     def _read_float(self, address: int):
         return struct.unpack("f",self.pcsx2_interface.read_bytes(address, 4))[0]
 
+    def _batch_read8(self, addresses: list[int]) -> list[int]:
+        return self.pcsx2_interface.batch_read_int8(addresses)
+
+    def _batch_read16(self, addresses: list[int]) -> list[int]:
+        return self.pcsx2_interface.batch_read_int16(addresses)
+
+    def _batch_read32(self, addresses: list[int]) -> list[int]:
+        return self.pcsx2_interface.batch_read_int32(addresses)
+
     def _write8(self, address: int, value: int):
         self.pcsx2_interface.write_int8(address, value)
 
@@ -186,7 +195,7 @@ class Sly2Interface(GameInterface):
         return pointer
 
     def get_operation_completion(self) -> list[bool]:
-        statuses = self.pcsx2_interface.batch_read_int32(self.addresses["operation completion"])
+        statuses = self._batch_read32(self.addresses["operation completion"])
         return [s == 1 for s in statuses]
 
     def is_goaled(self, condition: int) -> bool:
@@ -211,7 +220,7 @@ class Sly2Interface(GameInterface):
 
     def all_vault_statuses(self) -> list[bool]:
         vault_addresses = self.addresses["vaults"]
-        vault_values = self.pcsx2_interface.batch_read_int32(vault_addresses)
+        vault_values = self._batch_read32(vault_addresses)
         return [value == 1 for value in vault_values]
 
     def all_vaults_opened(self) -> bool:
@@ -254,7 +263,7 @@ class Sly2Interface(GameInterface):
             self.addresses["map id"]
         ]
 
-        results = self.pcsx2_interface.batch_read_int32(addresses_to_read)
+        results = self._batch_read32(addresses_to_read)
         active_character = results[0]
         episode = Sly2Episode(results[1])
         current_map = results[2]
@@ -305,7 +314,7 @@ class Sly2Interface(GameInterface):
         if not health_checks:
             return True
 
-        health_values = self.pcsx2_interface.batch_read_int32(health_checks)
+        health_values = self._batch_read32(health_checks)
 
         # If hackpack needed, the last value is hackpack pointer, need to read its health
         if needs_hackpack:
@@ -344,7 +353,7 @@ class Sly2Interface(GameInterface):
             job_status_addresses.append(job_address + 0x54)
 
         # Batch read all statuses
-        return [i == 3 for i in self.pcsx2_interface.batch_read_int32(job_status_addresses)]
+        return [i == 3 for i in self._batch_read32(job_status_addresses)]
 
     def set_items_received(self, n:int) -> None:
         self._write32(self.addresses["items received"], n)
@@ -546,7 +555,7 @@ class Sly2Interface(GameInterface):
         for episode_treasures in self.addresses["treasures"]:
             all_addresses += episode_treasures
 
-        values = self.pcsx2_interface.batch_read_int32(all_addresses)
+        values = self._batch_read32(all_addresses)
 
         result = [[v > 0 for v in values[i*3:i*3+3]] for i in range(8)]
 
@@ -555,7 +564,7 @@ class Sly2Interface(GameInterface):
     def all_loot_stolen(self) -> list[bool]:
         """Batch read all loot statuses"""
         loot_addresses = self.addresses["loot"]
-        values = self.pcsx2_interface.batch_read_int32(loot_addresses)
+        values = self._batch_read32(loot_addresses)
         return [value > 0 for value in values]
 
     def set_thiefnet_cost(self, powerup: int, cost: int) -> None:

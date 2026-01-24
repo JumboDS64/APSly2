@@ -56,13 +56,11 @@ def gen_clockwerk(world: "Sly2World") -> list[Item]:
 
     clockwerk_parts = []
 
-    if num_keys <= 13:
-        clockwerk_parts = world.random.sample(list(item_groups["Clockwerk Part"])[:13], num_keys)
-    elif num_keys <= 20:
-        clockwerk_parts = world.random.sample(list(item_groups["Clockwerk Part"])[:20], num_keys)
+    if num_keys <= 85:
+        clockwerk_parts = world.random.sample(list(item_groups["Clockwerk Part"])[:num_keys], num_keys)
     else:
-        clockwerk_parts = list(item_groups["Clockwerk Part"])[:20]
-        clockwerk_parts += ["Clockwerk Feather"]*(num_keys-20)
+        clockwerk_parts = list(item_groups["Clockwerk Part"])[:85]
+        clockwerk_parts += ["Clockwerk Feather"]*(num_keys-85)
 
     return [
         world.create_item(p)

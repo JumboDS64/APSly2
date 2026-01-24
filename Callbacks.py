@@ -25,6 +25,8 @@ async def update(ctx: 'Sly2Context', ap_connected: bool) -> None:
         ctx.game_interface.unlock_episodes()
 
     if ap_connected and ctx.slot_data is not None:
+        fix_mega_jump(ctx)
+
         in_safehouse = ctx.game_interface.in_safehouse()
         in_hub = ctx.game_interface.in_hub()
         current_map = ctx.game_interface.get_current_map()
@@ -137,7 +139,7 @@ async def init(ctx: 'Sly2Context', ap_connected: bool) -> None:
         ctx.game_interface.respawn_guards()
 
         # Stop mega jump from being unselected
-        fix_mega_jump(ctx)
+        # fix_mega_jump(ctx)
 
         if ctx.current_episode != 0:
             fix_jobs(ctx)
